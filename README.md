@@ -24,7 +24,7 @@ func _ready():
 
 func _on_share_button_pressed():
     if fb != null:
-    fb.appInvite(“YOUR_APP_URL”, ‘YOUR_APP_IMG_URL’)
+        fb.appInvite(“YOUR_APP_URL”, ‘YOUR_APP_IMG_URL’)
 ```        
 
 Any questions? Leave a comment on my blog [http://shinnil.blogspot.com.br](http://shinnil.blogspot.com.br)

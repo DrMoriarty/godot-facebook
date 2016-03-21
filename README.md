@@ -16,15 +16,15 @@ modules="org/godotengine/godot/GodotFacebook"
 **Example:**
 ```python
 func _ready():
-if(Globals.has_singleton("GodotFacebook")):
+    if(Globals.has_singleton("GodotFacebook")):
         fb = Globals.get_singleton("GodotFacebook")
-fb.init(‘YOUR_APP_ID’)
+        fb.init(‘YOUR_APP_ID’)
 
 (...)
 
 func _on_share_button_pressed():
-if fb != null:
-fb.appInvite(“YOUR_APP_URL”, ‘YOUR_APP_IMG_URL’)
+    if fb != null:
+    fb.appInvite(“YOUR_APP_URL”, ‘YOUR_APP_IMG_URL’)
 ```        
 
 Any questions? Leave a comment on my blog [http://shinnil.blogspot.com.br](http://shinnil.blogspot.com.br)

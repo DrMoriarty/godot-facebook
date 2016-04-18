@@ -1,6 +1,6 @@
 Simple *App invite on Facebook* module for [Godot Game Engine](http://godotengine.org/) (Android only). 
 
-To use it, make sure you're able to compile the Godot android template, you can find the instructions [here](http://docs.godotengine.org/en/latest/reference/compiling_for_android.html). Just copy the the GodotFacebook folder to godot/modules and recompile it.
+To use it, make sure you're able to compile the Godot android template, you can find the instructions [here](http://docs.godotengine.org/en/latest/reference/compiling_for_android.html). As the latest Facebook SDK needs Android SDK 15+, edit the file godot/platform/android/build.gradle.template and set minSdkVersion to 15. After that, just copy the the GodotFacebook folder to godot/modules and recompile it.
 
 
 **Module name (engine.cfg):**

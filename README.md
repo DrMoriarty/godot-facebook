@@ -51,4 +51,3 @@ func _on_login_button_pressed():
         fb.login()
 ```        
 
-Any questions? Leave a comment on my blog [http://shinnil.blogspot.com.br](http://shinnil.blogspot.com.br)

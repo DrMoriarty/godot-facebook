@@ -1,5 +1,6 @@
-<!--activity android:name="com.facebook.FacebookActivity"
+<activity android:name="com.facebook.FacebookActivity"
           android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-          android:theme="@android:style/Theme.Translucent.NoTitleBar" /-->
+          android:theme="@style/com_facebook_activity_theme" 
+          android:label="@string/godot_project_name_string" />
           
-<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="fb123456789123456"/>
+<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />

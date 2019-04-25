@@ -5,3 +5,6 @@ if env['platform'] == 'iphone':
     env.Append(CCFLAGS="-iframeworkmodules/GodotFacebook/ios")
     env.add_source_files(env.modules_sources, "ios/*.mm")
     env.add_source_files(env.modules_sources, "*.cpp")
+
+elif env['platform'] == 'android':
+    env.add_source_files(env.modules_sources, "*.cpp")

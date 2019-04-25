@@ -203,19 +203,23 @@ bool GodotFacebook::isLoggedIn() {
 }
 
 void GodotFacebook::userProfile(int callbackObject, const String& callbackMethod) {
+    NSString *cbMethod = [NSString stringWithUTF8String:callbackMethod.utf8().ptr()];
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"/me" parameters:nil];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                     Object *obj = ObjectDB::get_instance(callbackObject);
                     ERR_FAIL_COND(!obj);
+                    String strCbMethod(cbMethod.UTF8String);
                     if(error) {
-                        obj->call_deferred(callbackMethod, String(error.description.UTF8String));
+                        NSLog(@"FB userProfile error: %@", error);
+                        obj->call_deferred(strCbMethod, String(error.description.UTF8String));
                     } else {
+                        NSLog(@"FB userProfile result: %@", result);
                         Dictionary map;
                         if([result isKindOfClass:NSDictionary.class]) {
-                            obj->call_deferred(callbackMethod, convertToVariant(result));
+                            obj->call_deferred(strCbMethod, convertToVariant(result));
                         } else {
-                            obj->call_deferred(callbackMethod, Variant(false));
+                            obj->call_deferred(strCbMethod, Variant(false));
                         }
                     }
                 });
@@ -224,22 +228,26 @@ void GodotFacebook::userProfile(int callbackObject, const String& callbackMethod
 
 void GodotFacebook::callApi(const String& path, const Dictionary& properties, int callbackObject, const String& callbackMethod) {
 
+    NSString *cbMethod = [NSString stringWithUTF8String:callbackMethod.utf8().ptr()];
     NSDictionary *paramsDict = convertFromDictionary(properties);
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:[NSString stringWithUTF8String:path.utf8().ptr()] parameters:paramsDict];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            //dispatch_async(dispatch_get_main_queue(), ^{
                     Object *obj = ObjectDB::get_instance(callbackObject);
                     ERR_FAIL_COND(!obj);
+                    String strCbMethod(cbMethod.UTF8String);
                     if(error) {
-                        obj->call_deferred(callbackMethod, String(error.description.UTF8String));
+                        NSLog(@"FB callApi error: %@", error);
+                        obj->call_deferred(strCbMethod, String(error.description.UTF8String));
                     } else {
+                        NSLog(@"FB callApi result: %@", result);
                         if([result isKindOfClass:NSDictionary.class]) {
-                            obj->call_deferred(callbackMethod, convertToVariant(result));
+                            obj->call_deferred(strCbMethod, convertToVariant(result));
                         } else {
-                            obj->call_deferred(callbackMethod, Variant(false));
+                            obj->call_deferred(strCbMethod, Variant(false));
                         }
                     }
-                });
+                //});
         }];
 }
 

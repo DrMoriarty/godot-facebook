@@ -167,7 +167,7 @@ void GodotFacebook::login(const Array& permissions) {
                 [perms addObject:[NSString stringWithUTF8String:((String)p).utf8().ptr()]];
             }
         }
-        [loginManager logInWithReadPermissions:perms fromViewController:vc handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+        [loginManager logInWithPermissions:perms fromViewController:vc handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                         Object *obj = ObjectDB::get_instance(fbCallbackId);
                         ERR_FAIL_COND(!obj);

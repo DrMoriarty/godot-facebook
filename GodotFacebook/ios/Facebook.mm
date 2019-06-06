@@ -54,7 +54,7 @@ NSDictionary *convertFromDictionary(const Dictionary& dict)
         Variant key = dict.get_key_at_index(i);
         Variant val = dict.get_value_at_index(i);
         if(key.get_type() == Variant::STRING) {
-            NSString *strKey = [NSString stringWithUTF8String:((String)key).utf8().ptr()];
+            NSString *strKey = [NSString stringWithUTF8String:((String)key).utf8().get_data()];
             if(val.get_type() == Variant::INT) {
                 int i = (int)val;
                 result[strKey] = @(i);
@@ -62,7 +62,7 @@ NSDictionary *convertFromDictionary(const Dictionary& dict)
                 double d = (double)val;
                 result[strKey] = @(d);
             } else if(val.get_type() == Variant::STRING) {
-                NSString *s = [NSString stringWithUTF8String:((String)val).utf8().ptr()];
+                NSString *s = [NSString stringWithUTF8String:((String)val).utf8().get_data()];
                 result[strKey] = s;
             } else if(val.get_type() == Variant::BOOL) {
                 BOOL b = (bool)val;
@@ -117,7 +117,7 @@ GodotFacebook::~GodotFacebook()
 void GodotFacebook::init(const String& key) {
     [[FBSDKApplicationDelegate sharedInstance] application:[UIApplication sharedApplication] didFinishLaunchingWithOptions:nil];
     loginManager = [[FBSDKLoginManager alloc] init];
-    [FBSDKSettings setAppID:[NSString stringWithUTF8String:key.utf8().ptr()]];
+    [FBSDKSettings setAppID:[NSString stringWithUTF8String:key.utf8().get_data()]];
 }
 
 void GodotFacebook::setFacebookCallbackId(int facebookcallbackId) {
@@ -148,9 +148,9 @@ void GodotFacebook::gameRequest(const String& message, const String& recipient, 
     //content.filters = FBSDKGameRequestFilterAppNonUsers;
         
     //content.data = params[@"data"];
-    content.message = [NSString stringWithUTF8String:message.utf8().ptr()];
-    content.objectID = [NSString stringWithUTF8String:objectId.utf8().ptr()];
-    content.recipients = @[ [NSString stringWithUTF8String:recipient.utf8().ptr()] ];
+    content.message = [NSString stringWithUTF8String:message.utf8().get_data()];
+    content.objectID = [NSString stringWithUTF8String:objectId.utf8().get_data()];
+    content.recipients = @[ [NSString stringWithUTF8String:recipient.utf8().get_data()] ];
     //content.title = params[@"title"];
         
     dialog.content = content;
@@ -164,7 +164,7 @@ void GodotFacebook::login(const Array& permissions) {
         for(int i=0; i<permissions.size(); i++) {
             Variant p = permissions[i];
             if(p.get_type() == Variant::STRING) {
-                [perms addObject:[NSString stringWithUTF8String:((String)p).utf8().ptr()]];
+                [perms addObject:[NSString stringWithUTF8String:((String)p).utf8().get_data()]];
             }
         }
         [loginManager logInWithPermissions:perms fromViewController:vc handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
@@ -203,7 +203,7 @@ bool GodotFacebook::isLoggedIn() {
 }
 
 void GodotFacebook::userProfile(int callbackObject, const String& callbackMethod) {
-    NSString *cbMethod = [NSString stringWithUTF8String:callbackMethod.utf8().ptr()];
+    NSString *cbMethod = [NSString stringWithUTF8String:callbackMethod.utf8().get_data()];
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"/me" parameters:nil];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -228,9 +228,9 @@ void GodotFacebook::userProfile(int callbackObject, const String& callbackMethod
 
 void GodotFacebook::callApi(const String& path, const Dictionary& properties, int callbackObject, const String& callbackMethod) {
 
-    NSString *cbMethod = [NSString stringWithUTF8String:callbackMethod.utf8().ptr()];
+    NSString *cbMethod = [NSString stringWithUTF8String:callbackMethod.utf8().get_data()];
     NSDictionary *paramsDict = convertFromDictionary(properties);
-    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:[NSString stringWithUTF8String:path.utf8().ptr()] parameters:paramsDict];
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:[NSString stringWithUTF8String:path.utf8().get_data()] parameters:paramsDict];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
             //dispatch_async(dispatch_get_main_queue(), ^{
                     Object *obj = ObjectDB::get_instance(callbackObject);

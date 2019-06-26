@@ -16,6 +16,7 @@ import com.facebook.share.widget.AppInviteDialog;
 import com.facebook.share.widget.GameRequestDialog;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdkNotInitializedException;
+import com.facebook.appevents.AppEventsLogger;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class GodotFacebook extends Godot.SingletonBase {
     private Integer facebookCallbackId = 0;
     private GameRequestDialog requestDialog;
     private CallbackManager callbackManager;
+    private AppEventsLogger fbLogger;
 
     static public Godot.SingletonBase initialize(Activity p_activity) 
     { 
@@ -50,7 +52,13 @@ public class GodotFacebook extends Godot.SingletonBase {
                 "logout",
                 "isLoggedIn",
                 "userProfile",
-                "callApi"});
+                "callApi",
+                "set_push_token",
+                "log_event",
+                "log_event_value",
+                "log_event_params",
+                "log_event_value_params"
+            });
         activity = (Godot)p_activity;
     }
 
@@ -63,9 +71,10 @@ public class GodotFacebook extends Godot.SingletonBase {
             public void run() {
                 try {
                     FacebookSdk.setApplicationId(key);
-                    FacebookSdk.sdkInitialize(activity.getApplicationContext());                  
+                    FacebookSdk.sdkInitialize(activity.getApplicationContext());
 
                     callbackManager = CallbackManager.Factory.create();
+                    fbLogger = AppEventsLogger.newLogger(activity.getApplicationContext(), key);
                     requestDialog = new GameRequestDialog(activity);
                     requestDialog.registerCallback(callbackManager, new FacebookCallback<GameRequestDialog.Result>() {
                             public void onSuccess(GameRequestDialog.Result result) {
@@ -253,6 +262,64 @@ public class GodotFacebook extends Godot.SingletonBase {
         
     }
 
+    public void set_push_token(final String token)
+    {
+        Log.i("godot", "Facebook set_push_token");
+        if(fbLogger == null) {
+            Log.w("godot", "Facebook logger doesn't inited yet!");
+            return;
+        }
+        fbLogger.setPushNotificationsRegistrationId(token);
+    }
+
+    public void log_event(final String event)
+    {
+        Log.i("godot", "Facebook log_event");
+        if(fbLogger == null) {
+            Log.w("godot", "Facebook logger doesn't inited yet!");
+            return;
+        }
+        fbLogger.logEvent(event);
+    }
+
+    public void log_event_value(final String event, double value)
+    {
+        Log.i("godot", "Facebook log_event_value");
+        if(fbLogger == null) {
+            Log.w("godot", "Facebook logger doesn't inited yet!");
+            return;
+        }
+        fbLogger.logEvent(event, value);
+    }
+
+    public void log_event_params(final String event, final Dictionary params)
+    {
+        Log.i("godot", "Facebook log_event_params");
+        if(fbLogger == null) {
+            Log.w("godot", "Facebook logger doesn't inited yet!");
+            return;
+        }
+        Bundle parameters = new Bundle();
+        for(String key: params.get_keys()) {
+            parameters.putString(key, params.get(key).toString());
+        }
+        fbLogger.logEvent(event, parameters);
+    }
+
+    public void log_event_value_params(final String event, double value, final Dictionary params)
+    {
+        Log.i("godot", "Facebook log_event_value_params");
+        if(fbLogger == null) {
+            Log.w("godot", "Facebook logger doesn't inited yet!");
+            return;
+        }
+        Bundle parameters = new Bundle();
+        for(String key: params.get_keys()) {
+            parameters.putString(key, params.get(key).toString());
+        }
+        fbLogger.logEvent(event, value, parameters);
+    }
+
     // Internal methods
 
     public void callbackSuccess(String ticket, String signature, String sku) {
@@ -264,5 +331,4 @@ public class GodotFacebook extends Godot.SingletonBase {
     {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
 }

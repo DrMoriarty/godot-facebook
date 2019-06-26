@@ -251,6 +251,32 @@ void GodotFacebook::callApi(const String& path, const Dictionary& properties, in
         }];
 }
 
+void GodotFacebook::pushToken(const String& token) {
+    NSData *data = [NSData dataWithBytes:token.utf8().get_data() length:token.utf8().length()];
+    [FBSDKAppEvents setPushNotificationsDeviceToken:data];
+}
+
+void GodotFacebook::logEvent(const String& event) {
+    NSString *event_name = [NSString stringWithUTF8String:event.utf8().get_data()];
+    [FBSDKAppEvents logEvent:event_name];
+}
+
+void GodotFacebook::logEventValue(const String& event, double value) {
+    NSString *event_name = [NSString stringWithUTF8String:event.utf8().get_data()];
+    [FBSDKAppEvents logEvent:event_name valueToSum:value];
+}
+
+void GodotFacebook::logEventParams(const String& event, const Dictionary& params) {
+    NSString *event_name = [NSString stringWithUTF8String:event.utf8().get_data()];
+    NSDictionary *paramsDict = convertFromDictionary(params);
+    [FBSDKAppEvents logEvent:event_name parameters:paramsDict];
+}
+
+void GodotFacebook::logEventValueParams(const String& event, double value, const Dictionary& params) {
+    NSString *event_name = [NSString stringWithUTF8String:event.utf8().get_data()];
+    NSDictionary *paramsDict = convertFromDictionary(params);
+    [FBSDKAppEvents logEvent:event_name valueToSum:value parameters:paramsDict];
+}
 
 void GodotFacebook::_bind_methods()
 {
@@ -263,4 +289,9 @@ void GodotFacebook::_bind_methods()
     ClassDB::bind_method(D_METHOD("isLoggedIn"), &GodotFacebook::isLoggedIn);
     ClassDB::bind_method(D_METHOD("userProfile"), &GodotFacebook::userProfile);
     ClassDB::bind_method(D_METHOD("callApi"), &GodotFacebook::callApi);
+    ClassDB::bind_method(D_METHOD("set_push_token", "token"), &GodotFacebook::pushToken);
+    ClassDB::bind_method(D_METHOD("log_event", "event"), &GodotFacebook::logEvent);
+    ClassDB::bind_method(D_METHOD("log_event_value", "event", "value"), &GodotFacebook::logEventValue);
+    ClassDB::bind_method(D_METHOD("log_event_params", "event", "params"), &GodotFacebook::logEventValue);
+    ClassDB::bind_method(D_METHOD("log_event_value_params", "event", "value", "params"), &GodotFacebook::logEventValue);
 }

@@ -30,6 +30,12 @@ public:
     void userProfile(int callbackObject, const String& callbackMethod);
     void callApi(const String& path, const Dictionary& properties, int callbackObject, const String& callbackMethod);
 
+    void pushToken(const String& token);
+    void logEvent(const String& event);
+    void logEventValue(const String& event, double value);
+    void logEventParams(const String& event, const Dictionary& params);
+    void logEventValueParams(const String& event, double value, const Dictionary& params);
+
 };
 
 #endif /* Facebook_h */

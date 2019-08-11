@@ -315,7 +315,8 @@ public class GodotFacebook extends Godot.SingletonBase {
         }
         Bundle parameters = new Bundle();
         for(String key: params.get_keys()) {
-            parameters.putString(key, params.get(key).toString());
+            if(params.get(key) != null) 
+                parameters.putString(key, params.get(key).toString());
         }
         fbLogger.logEvent(event, value, parameters);
     }

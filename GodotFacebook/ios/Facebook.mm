@@ -292,6 +292,6 @@ void GodotFacebook::_bind_methods()
     ClassDB::bind_method(D_METHOD("set_push_token", "token"), &GodotFacebook::pushToken);
     ClassDB::bind_method(D_METHOD("log_event", "event"), &GodotFacebook::logEvent);
     ClassDB::bind_method(D_METHOD("log_event_value", "event", "value"), &GodotFacebook::logEventValue);
-    ClassDB::bind_method(D_METHOD("log_event_params", "event", "params"), &GodotFacebook::logEventValue);
-    ClassDB::bind_method(D_METHOD("log_event_value_params", "event", "value", "params"), &GodotFacebook::logEventValue);
+    ClassDB::bind_method(D_METHOD("log_event_params", "event", "params"), &GodotFacebook::logEventParams);
+    ClassDB::bind_method(D_METHOD("log_event_value_params", "event", "value", "params"), &GodotFacebook::logEventValueParams);
 }

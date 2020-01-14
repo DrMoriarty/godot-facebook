@@ -282,7 +282,7 @@ public class GodotFacebook extends Godot.SingletonBase {
         fbLogger.logEvent(event);
     }
 
-    public void log_event_value(final String event, double value)
+    public void log_event_value(final String event, float value)
     {
         Log.i("godot", "Facebook log_event_value");
         if(fbLogger == null) {
@@ -306,7 +306,7 @@ public class GodotFacebook extends Godot.SingletonBase {
         fbLogger.logEvent(event, parameters);
     }
 
-    public void log_event_value_params(final String event, double value, final Dictionary params)
+    public void log_event_value_params(final String event, float value, final Dictionary params)
     {
         Log.i("godot", "Facebook log_event_value_params");
         if(fbLogger == null) {

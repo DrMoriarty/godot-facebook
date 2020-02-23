@@ -36,6 +36,8 @@ public:
     void logEventParams(const String& event, const Dictionary& params);
     void logEventValueParams(const String& event, double value, const Dictionary& params);
 
+    String advertisingID();
+    Array extinfo();
 };
 
 #endif /* Facebook_h */

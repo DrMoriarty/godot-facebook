@@ -11,9 +11,47 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
 #import "./Facebook.h"
+#import <AdSupport/ASIdentifierManager.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
+#include <sys/sysctl.h>
+#include <sys/types.h>
+#include <mach/mach.h>
+#include <mach/processor_info.h>
+#include <mach/mach_host.h>
+#import <sys/utsname.h>
 
 FBSDKLoginManager* loginManager = NULL;
 int GodotFacebook::fbCallbackId = 0;
+
+
+#define FB_ARRAY_COUNT(x) sizeof(x) / sizeof(x[0])
+
+uint _readSysCtlUInt(int ctl, int type) {
+  int mib[2] = {ctl, type};
+  uint value;
+  size_t size = sizeof value;
+  if (0 != sysctl(mib, FB_ARRAY_COUNT(mib), &value, &size, NULL, 0)) {
+    return 0;
+  }
+  return value;
+}
+
+uint _coreCount() {
+    return _readSysCtlUInt(CTL_HW, HW_AVAILCPU);
+}
+
+static const u_int FB_GIGABYTE = 1024 * 1024 * 1024;  // bytes
+
+NSNumber * _getTotalDiskSpace() {
+    NSDictionary *attrs = [[[NSFileManager alloc] init] attributesOfFileSystemForPath:NSHomeDirectory() error:nil];
+    return [attrs objectForKey:NSFileSystemSize];
+}
+
+NSNumber * _getRemainingDiskSpace() {
+    NSDictionary *attrs = [[[NSFileManager alloc] init] attributesOfFileSystemForPath:NSHomeDirectory() error:nil];
+    return [attrs objectForKey:NSFileSystemFreeSize];
+}
 
 Variant convertToVariant(id val)
 {
@@ -278,6 +316,84 @@ void GodotFacebook::logEventValueParams(const String& event, double value, const
     [FBSDKAppEvents logEvent:event_name valueToSum:value parameters:paramsDict];
 }
 
+String GodotFacebook::advertisingID() {
+    NSString *userId = [[[ASIdentifierManager sharedManager]
+   advertisingIdentifier] UUIDString];
+    String str(userId.UTF8String);
+    return str;
+}
+
+Array GodotFacebook::extinfo() {
+    Array res;
+    
+    //NSMutableString *ei = [NSMutableString new];
+    //[ei appendString:@"i2"];
+    res.append(Variant(String("i2")));
+
+    NSBundle *mainBundle = NSBundle.mainBundle;
+    //[ei appendFormat:@",%@", mainBundle.bundleIdentifier];
+    res.append(Variant(String(mainBundle.bundleIdentifier.UTF8String)));
+
+    //[ei appendFormat:@",%@", [mainBundle objectForInfoDictionaryKey:@"CFBundleVersion"]];
+    res.append(Variant(String([[mainBundle objectForInfoDictionaryKey:@"CFBundleVersion"] UTF8String])));
+
+    //[ei appendFormat:@",%@", [mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    res.append(Variant(String([[mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"] UTF8String])));
+
+    UIDevice *device = [UIDevice currentDevice];
+    //[ei appendFormat:@",%@", device.systemVersion];
+    res.append(Variant(String(device.systemVersion.UTF8String)));
+
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    //[ei appendFormat:@",%@", @(systemInfo.machine)];
+    res.append(Variant(String([NSString stringWithFormat:@"%@", @(systemInfo.machine)].UTF8String)));
+
+    //[ei appendFormat:@",%@", [[NSLocale currentLocale] localeIdentifier]];
+    res.append(Variant(String(NSLocale.currentLocale.localeIdentifier.UTF8String)));
+
+    NSTimeZone *timeZone = [NSTimeZone systemTimeZone];
+    //[ei appendFormat:@",%@", timeZone.abbreviation];
+    res.append(Variant(String(timeZone.abbreviation.UTF8String)));
+
+    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+    //[ei appendFormat:@",%@", [carrier carrierName] ?: @"NoCarrier"];
+    res.append(Variant(String(([carrier carrierName] ?: @"NoCarrier").UTF8String)));
+
+    UIScreen *sc = [UIScreen mainScreen];
+    CGRect sr = sc.bounds;
+    unsigned long _width = (unsigned long)sr.size.width;
+    unsigned long _height = (unsigned long)sr.size.height;
+    NSString *densityString = sc.scale ? [NSString stringWithFormat:@"%.02f", sc.scale] : @"";
+
+    //[ei appendFormat:@",%ld,%ld,%@", _width, _height, densityString];
+    res.append(Variant((unsigned int)_width));
+    res.append(Variant((unsigned int)_height));
+    res.append(Variant(String(densityString.UTF8String)));
+
+    //[ei appendFormat:@",%d", _coreCount()];
+    res.append(Variant(_coreCount()));
+
+    // Total disk space
+    float totalDiskSpace = [_getTotalDiskSpace() floatValue];
+    unsigned long long _totalDiskSpaceGB = (unsigned long long)round(totalDiskSpace / FB_GIGABYTE);
+
+    // Remaining disk space
+    float remainingDiskSpace = [_getRemainingDiskSpace() floatValue];
+    unsigned long long _remainingDiskSpaceGB = (unsigned long long)round(remainingDiskSpace / FB_GIGABYTE);
+    
+    //[ei appendFormat:@",%ld,%ld", (long)_totalDiskSpaceGB, (long)_remainingDiskSpaceGB];
+    res.append(Variant(_totalDiskSpaceGB));
+    res.append(Variant(_remainingDiskSpaceGB));
+
+    //[ei appendFormat:@",%@", timeZone.name];
+    res.append(Variant(String(timeZone.name.UTF8String)));
+
+    //String str(ei.UTF8String);
+    return res;
+}
+
 void GodotFacebook::_bind_methods()
 {
     ClassDB::bind_method(D_METHOD("init"), &GodotFacebook::init);
@@ -294,4 +410,6 @@ void GodotFacebook::_bind_methods()
     ClassDB::bind_method(D_METHOD("log_event_value", "event", "value"), &GodotFacebook::logEventValue);
     ClassDB::bind_method(D_METHOD("log_event_params", "event", "params"), &GodotFacebook::logEventParams);
     ClassDB::bind_method(D_METHOD("log_event_value_params", "event", "value", "params"), &GodotFacebook::logEventValueParams);
+    ClassDB::bind_method(D_METHOD("advertising_id"), &GodotFacebook::advertisingID);
+    ClassDB::bind_method(D_METHOD("extinfo"), &GodotFacebook::extinfo);
 }

@@ -1,32 +1,52 @@
 package org.godotengine.godot;
 
-import com.facebook.FacebookSdk;
-import com.facebook.CallbackManager;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
+import android.util.Log;
+import android.util.DisplayMetrics;
+import android.telephony.TelephonyManager;
+import android.view.WindowManager;
+import android.view.Display;
 import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
-import com.facebook.LoginStatusCallback;
-import com.facebook.GraphRequest;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.FacebookSdkNotInitializedException;
 import com.facebook.GraphRequest.GraphJSONObjectCallback;
+import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.LoginStatusCallback;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.model.GameRequestContent;
 import com.facebook.share.widget.AppInviteDialog;
 import com.facebook.share.widget.GameRequestDialog;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdkNotInitializedException;
-import com.facebook.appevents.AppEventsLogger;
-import android.app.Activity;
-import android.content.Intent;
-import android.util.Log;
-import android.os.Bundle;
-import java.util.Map;
-import java.util.List;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient.Info;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+//import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import java.io.IOException;
+import java.io.File;
 import java.util.Arrays;
-import org.json.JSONObject;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.Locale;
+import java.util.Date;
+import java.lang.Exception;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class GodotFacebook extends Godot.SingletonBase {
 
@@ -35,6 +55,8 @@ public class GodotFacebook extends Godot.SingletonBase {
     private GameRequestDialog requestDialog;
     private CallbackManager callbackManager;
     private AppEventsLogger fbLogger;
+    private static long totalExternalStorageGB;
+    private static long availableExternalStorageGB;
 
     static public Godot.SingletonBase initialize(Activity p_activity) 
     { 
@@ -57,7 +79,9 @@ public class GodotFacebook extends Godot.SingletonBase {
                 "log_event",
                 "log_event_value",
                 "log_event_params",
-                "log_event_value_params"
+                "log_event_value_params",
+                "advertising_id",
+                "extinfo"
             });
         activity = (Godot)p_activity;
     }
@@ -321,6 +345,94 @@ public class GodotFacebook extends Godot.SingletonBase {
         fbLogger.logEvent(event, value, parameters);
     }
 
+    public String advertising_id()
+    {
+        Info adInfo = null;
+        try {
+            adInfo = AdvertisingIdClient.getAdvertisingIdInfo(activity);
+            String userId = adInfo.getId();
+            return userId;
+        } catch (IOException e) {
+            Log.e("godot", e.toString());
+        //} catch (GooglePlayServicesAvailabilityException e) {
+            //Log.e("godot", e.toString());
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Log.e("godot", e.toString());
+        } catch (Exception e) {
+            Log.e("godot", e.toString());
+        }
+        return "";
+    }
+
+    public String[] extinfo()
+    {
+        String[] res = new String[16];
+        res[0] = "a2";
+
+        String pkgName = activity.getApplicationContext().getPackageName();
+        res[1] = pkgName;
+
+        try {
+            PackageInfo pi = activity.getApplicationContext().getPackageManager().getPackageInfo(pkgName, 0);
+            res[2] = ""+pi.versionCode;
+            res[3] = ""+pi.versionName;
+        } catch (NameNotFoundException e) {
+        }
+
+        res[4] = Build.VERSION.RELEASE;
+        res[5] = Build.MODEL;
+
+        Locale locale;
+        try {
+            locale = activity.getApplicationContext().getResources().getConfiguration().locale;
+        } catch (Exception e) {
+            locale = Locale.getDefault();
+        }
+        res[6] = locale.getLanguage() + "_" + locale.getCountry();
+        
+        TimeZone tz = TimeZone.getDefault();
+        String deviceTimezoneAbbreviation = tz.getDisplayName(tz.inDaylightTime(new Date()), TimeZone.SHORT);
+        String deviceTimeZoneName = tz.getID();
+        res[7] = deviceTimezoneAbbreviation;
+
+        TelephonyManager telephonyManager = ((TelephonyManager) activity.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE));
+        String carrierName = telephonyManager.getNetworkOperatorName();
+        res[8] = carrierName;
+
+        int width = 0;
+        int height = 0;
+        double density = 0;
+        try {
+            WindowManager wm = (WindowManager) activity.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+            if (wm != null) {
+                Display display = wm.getDefaultDisplay();
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                display.getMetrics(displayMetrics);
+                width = displayMetrics.widthPixels;
+                height = displayMetrics.heightPixels;
+                density = displayMetrics.density;
+            }
+        } catch (Exception e) {
+            // Swallow
+        }
+        String densityStr = String.format("%.2f", density);
+        res[9] = "" + width;
+        res[10] = "" + height;
+        res[11] = densityStr;
+
+        int numCPUCores = Math.max(Runtime.getRuntime().availableProcessors(), 1);
+        res[12] = "" + numCPUCores;
+
+        refreshTotalExternalStorage();
+        refreshAvailableExternalStorage();
+        res[13] = "" + totalExternalStorageGB;
+        res[14] = "" + availableExternalStorageGB;
+
+        res[15] = deviceTimeZoneName;
+
+        return res;
+    }
+
     // Internal methods
 
     public void callbackSuccess(String ticket, String signature, String sku) {
@@ -328,8 +440,51 @@ public class GodotFacebook extends Godot.SingletonBase {
         //GodotLib.calldeferred(purchaseCallbackId, "consume_fail", new Object[]{});
 	}
 
+    /**
+     * @return whether there is external storage:
+     */
+    private static boolean externalStorageExists() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+    // getAvailableBlocks/getBlockSize deprecated but required pre-API v18
+    @SuppressWarnings("deprecation")
+    private static void refreshAvailableExternalStorage() {
+        try {
+            if (externalStorageExists()) {
+                File path = Environment.getExternalStorageDirectory();
+                StatFs stat = new StatFs(path.getPath());
+                availableExternalStorageGB = (long)stat.getAvailableBlocks() * (long)stat.getBlockSize();
+            }
+            availableExternalStorageGB = convertBytesToGB(availableExternalStorageGB);
+        } catch (Exception e) {
+            // Swallow
+        }
+    }
+
+    // getAvailableBlocks/getBlockSize deprecated but required pre-API v18
+    @SuppressWarnings("deprecation")
+    private static void refreshTotalExternalStorage() {
+        try {
+            if (externalStorageExists()) {
+                File path = Environment.getExternalStorageDirectory();
+                StatFs stat = new StatFs(path.getPath());
+                totalExternalStorageGB = (long)stat.getBlockCount() * (long)stat.getBlockSize();
+            }
+            totalExternalStorageGB = convertBytesToGB(totalExternalStorageGB);
+        } catch (Exception e) {
+            // Swallow
+        }
+    }
+
+    private static long convertBytesToGB(double bytes) {
+        return Math.round(bytes / (1024.0 * 1024.0 * 1024.0));
+    }
+
     @Override protected void onMainActivityResult (int requestCode, int resultCode, Intent data)
     {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        if(callbackManager != null) {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

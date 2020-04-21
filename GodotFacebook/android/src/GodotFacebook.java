@@ -31,12 +31,15 @@ import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.model.GameRequestContent;
 import com.facebook.share.widget.AppInviteDialog;
 import com.facebook.share.widget.GameRequestDialog;
+import com.facebook.applinks.AppLinkData;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient.Info;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 //import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import java.math.BigDecimal;
 import java.io.IOException;
 import java.io.File;
+import java.util.Currency;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +58,9 @@ public class GodotFacebook extends Godot.SingletonBase {
     private GameRequestDialog requestDialog;
     private CallbackManager callbackManager;
     private AppEventsLogger fbLogger;
+    private String deepLinkUri;
+    private String deepLinkRef;
+    private String deepLinkPromoCode;
     private static long totalExternalStorageGB;
     private static long availableExternalStorageGB;
 
@@ -80,10 +86,30 @@ public class GodotFacebook extends Godot.SingletonBase {
                 "log_event_value",
                 "log_event_params",
                 "log_event_value_params",
+                "log_purchase",
+                "log_purchase_params",
+                "deep_link_uri",
+                "deep_link_ref",
+                "deep_link_promo",
                 "advertising_id",
                 "extinfo"
             });
         activity = (Godot)p_activity;
+        AppLinkData.fetchDeferredAppLinkData(activity, 
+                                             new AppLinkData.CompletionHandler() {
+                                                 @Override
+                                                 public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
+                                                     if(appLinkData != null) {
+                                                         Log.w("godot", "Deferred app link data:"+appLinkData.toString());
+                                                         deepLinkUri = appLinkData.getTargetUri().toString();
+                                                         deepLinkRef = appLinkData.getRef();
+                                                         deepLinkPromoCode = appLinkData.getPromotionCode();
+                                                     } else {
+                                                         Log.w("godot", "No deferred app link");
+                                                     }
+                                                 }
+                                             }
+                                             );
     }
 
     // Public methods
@@ -114,15 +140,18 @@ public class GodotFacebook extends Godot.SingletonBase {
                                 } catch (JSONException e) {
                                     map = new Dictionary();
                                 }
-                                GodotLib.calldeferred(facebookCallbackId, "request_success", new Object[]{map});
+                                if(facebookCallbackId != 0)
+                                    GodotLib.calldeferred(facebookCallbackId, "request_success", new Object[]{map});
                             }
                             public void onCancel() {
                                 Log.w("godot", "Facebook game request cancelled");
-                                GodotLib.calldeferred(facebookCallbackId, "request_cancelled", new Object[]{});
+                                if(facebookCallbackId != 0)
+                                    GodotLib.calldeferred(facebookCallbackId, "request_cancelled", new Object[]{});
                             }
                             public void onError(FacebookException error) {
                                 Log.e("godot", "Failed to send facebook game request: " + error.getMessage()); 
-                                GodotLib.calldeferred(facebookCallbackId, "request_failed", new Object[]{error.toString()});
+                                if(facebookCallbackId != 0)
+                                    GodotLib.calldeferred(facebookCallbackId, "request_failed", new Object[]{error.toString()});
                             }
                         });
 
@@ -130,17 +159,20 @@ public class GodotFacebook extends Godot.SingletonBase {
                             @Override
                             public void onSuccess(LoginResult loginResult) {
                                 AccessToken at = loginResult.getAccessToken();
-                                GodotLib.calldeferred(facebookCallbackId, "login_success", new Object[]{at.getToken()});
+                                if(facebookCallbackId != 0)
+                                    GodotLib.calldeferred(facebookCallbackId, "login_success", new Object[]{at.getToken()});
                             }
 
                             @Override
                             public void onCancel() {
-                                GodotLib.calldeferred(facebookCallbackId, "login_cancelled", new Object[]{});
+                                if(facebookCallbackId != 0)
+                                    GodotLib.calldeferred(facebookCallbackId, "login_cancelled", new Object[]{});
                             }
 
                             @Override
                             public void onError(FacebookException exception) {
-                                GodotLib.calldeferred(facebookCallbackId, "login_failed", new Object[]{exception.toString()});
+                                if(facebookCallbackId != 0)
+                                    GodotLib.calldeferred(facebookCallbackId, "login_failed", new Object[]{exception.toString()});
                             }
                         });
 
@@ -191,7 +223,8 @@ public class GodotFacebook extends Godot.SingletonBase {
         Log.i("godot", "Facebook login");
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if(accessToken != null && !accessToken.isExpired()) {
-            GodotLib.calldeferred(facebookCallbackId, "login_success", new Object[]{accessToken.getToken()});
+            if(facebookCallbackId != 0)
+                GodotLib.calldeferred(facebookCallbackId, "login_success", new Object[]{accessToken.getToken()});
         } else {
             List<String> perm = Arrays.asList(permissions);
             LoginManager.getInstance().logInWithReadPermissions(activity, perm);
@@ -343,6 +376,43 @@ public class GodotFacebook extends Godot.SingletonBase {
                 parameters.putString(key, params.get(key).toString());
         }
         fbLogger.logEvent(event, value, parameters);
+    }
+
+    public void log_purchase(float price, final String currency)
+    {
+        Log.i("godot", "Facebook log_purchase");
+        if(fbLogger == null) {
+            Log.w("godot", "Facebook logger doesn't inited yet!");
+            return;
+        }
+        fbLogger.logPurchase(new BigDecimal(price), Currency.getInstance(currency));
+    }
+
+    public void log_purchase_params(float price, final String currency, final Dictionary params)
+    {
+        Log.i("godot", "Facebook log_purchase_params");
+        if(fbLogger == null) {
+            Log.w("godot", "Facebook logger doesn't inited yet!");
+            return;
+        }
+        Bundle parameters = new Bundle();
+        for(String key: params.get_keys()) {
+            if(params.get(key) != null) 
+                parameters.putString(key, params.get(key).toString());
+        }
+        fbLogger.logPurchase(new BigDecimal(price), Currency.getInstance(currency), parameters);
+    }
+
+    public String deep_link_uri() {
+        return deepLinkUri;
+    }
+
+    public String deep_link_ref() {
+        return deepLinkRef;
+    }
+
+    public String deep_link_promo() {
+        return deepLinkPromoCode;
     }
 
     public String advertising_id()

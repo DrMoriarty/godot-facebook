@@ -79,10 +79,10 @@ Variant convertToVariant(id val)
         return Variant(str);
     } else {
         // error
-        ERR_EXPLAIN("Unknown conversion method for type");
         ERR_PRINT([val description].UTF8String);
-        return Variant(false);
+        ERR_FAIL_V_MSG(Variant(false), "Unknown conversion method for type");
     }
+    return Variant(false);
 }
 
 NSDictionary *convertFromDictionary(const Dictionary& dict)

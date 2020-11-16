@@ -53,7 +53,7 @@ import org.json.JSONObject;
 
 public class GodotFacebook extends Godot.SingletonBase {
 
-    private Godot activity = null;
+    private Activity activity = null;
     private Integer facebookCallbackId = 0;
     private GameRequestDialog requestDialog;
     private CallbackManager callbackManager;
@@ -94,7 +94,7 @@ public class GodotFacebook extends Godot.SingletonBase {
                 "advertising_id",
                 "extinfo"
             });
-        activity = (Godot)p_activity;
+        activity = p_activity;
         AppLinkData.fetchDeferredAppLinkData(activity, 
                                              new AppLinkData.CompletionHandler() {
                                                  @Override

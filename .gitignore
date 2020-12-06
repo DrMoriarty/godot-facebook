@@ -1,3 +1,5 @@
 *.o
 *.d
 *.pyc
+ios-framework/build/*
+ios-framework/gdnative_ios.xcodeproj/project.xcworkspace/xcuserdata

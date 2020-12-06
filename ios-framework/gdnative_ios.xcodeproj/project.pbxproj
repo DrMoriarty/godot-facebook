@@ -7,27 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		51A3D96F257D258400D4E730 /* entry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51A3D96E257D258400D4E730 /* entry.cpp */; };
 		51B589D9257BB0BF00D90487 /* Facebook.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 51B589D7257BB0BF00D90487 /* Facebook.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		51B589DA257BB0BF00D90487 /* Facebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = 51B589D8257BB0BF00D90487 /* Facebook.mm */; };
 		51B589E0257BB23000D90487 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51B589DD257BB23000D90487 /* FBSDKCoreKit.framework */; };
 		51B589E2257BB23000D90487 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51B589DE257BB23000D90487 /* FBSDKLoginKit.framework */; };
 		51B589E4257BB23000D90487 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51B589DF257BB23000D90487 /* FBSDKShareKit.framework */; };
-		51B589EA257BB34B00D90487 /* BridgeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B589E9257BB34B00D90487 /* BridgeHeader.swift */; };
 		51B589F4257BC5E800D90487 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51B589F3257BC5E800D90487 /* Accelerate.framework */; };
 		51E8DE9A24D83FF200CB0940 /* libgodot-cpp.ios.release.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E8DE9924D83FC100CB0940 /* libgodot-cpp.ios.release.a */; };
 		90A13CED24AB317C00E8464F /* gdnative_ios.h in Headers */ = {isa = PBXBuildFile; fileRef = 90A13CEB24AB317C00E8464F /* gdnative_ios.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		51A3D96E257D258400D4E730 /* entry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entry.cpp; sourceTree = "<group>"; };
 		51B589D7257BB0BF00D90487 /* Facebook.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Facebook.hpp; sourceTree = "<group>"; };
 		51B589D8257BB0BF00D90487 /* Facebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Facebook.mm; sourceTree = "<group>"; };
 		51B589DD257BB23000D90487 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = gdnative_ios/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		51B589DE257BB23000D90487 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = gdnative_ios/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		51B589DF257BB23000D90487 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = gdnative_ios/FBSDKShareKit.framework; sourceTree = "<group>"; };
-		51B589E9257BB34B00D90487 /* BridgeHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BridgeHeader.swift; sourceTree = "<group>"; };
 		51B589F3257BC5E800D90487 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		51E8DE9924D83FC100CB0940 /* libgodot-cpp.ios.release.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libgodot-cpp.ios.release.a"; path = "../../godot-cpp/bin/libgodot-cpp.ios.release.a"; sourceTree = "<group>"; };
-		90A13CE824AB317C00E8464F /* facebook-godot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "facebook-godot.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		90A13CE824AB317C00E8464F /* facebook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = facebook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90A13CEB24AB317C00E8464F /* gdnative_ios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gdnative_ios.h; sourceTree = "<group>"; };
 		90A13CEC24AB317C00E8464F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -52,8 +52,8 @@
 			isa = PBXGroup;
 			children = (
 				51B589D7257BB0BF00D90487 /* Facebook.hpp */,
-				51B589E9257BB34B00D90487 /* BridgeHeader.swift */,
 				51B589D8257BB0BF00D90487 /* Facebook.mm */,
+				51A3D96E257D258400D4E730 /* entry.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -70,7 +70,7 @@
 		90A13CE924AB317C00E8464F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				90A13CE824AB317C00E8464F /* facebook-godot.framework */,
+				90A13CE824AB317C00E8464F /* facebook.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,7 +127,7 @@
 			);
 			name = gdnative_ios;
 			productName = gdnative_ios;
-			productReference = 90A13CE824AB317C00E8464F /* facebook-godot.framework */;
+			productReference = 90A13CE824AB317C00E8464F /* facebook.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -178,8 +178,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51A3D96F257D258400D4E730 /* entry.cpp in Sources */,
 				51B589DA257BB0BF00D90487 /* Facebook.mm in Sources */,
-				51B589EA257BB34B00D90487 /* BridgeHeader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,6 +195,7 @@
 					x86_64,
 					armv7,
 				);
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -262,6 +263,7 @@
 					x86_64,
 					armv7,
 				);
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -353,8 +355,8 @@
 					"-fcxx-modules",
 					"-DDEBUG_ENABLED",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "ru.mobilap.facebook-godot";
-				PRODUCT_NAME = "facebook-godot";
+				PRODUCT_BUNDLE_IDENTIFIER = ru.mobilap.facebook;
+				PRODUCT_NAME = facebook;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -401,8 +403,8 @@
 					"-fmodules",
 					"-fcxx-modules",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "ru.mobilap.facebook-godot";
-				PRODUCT_NAME = "facebook-godot";
+				PRODUCT_BUNDLE_IDENTIFIER = ru.mobilap.facebook;
+				PRODUCT_NAME = facebook;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;

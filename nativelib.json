@@ -1,0 +1,26 @@
+{
+  "name": "facebook-plugin",
+  "description": "Facebook plugin for Godot engine",
+  "version": "0.1.0",
+  "dependencies": [
+  ],
+  "files": {
+    "scripts": "scripts"
+  },
+  "platform_ios": {
+    "dependencies": [
+      "ios-export-plugin"
+    ],
+    "files": {
+      "ios-framework/build/facebook.gdnlib": "addons/facebook-ios/",
+      "ios-framework/build/facebook.gdns": "addons/facebook-ios/",
+      "ios-framework/build/.gitignore": "addons/facebook-ios/",
+      "ios-framework/build/facebook.xcframework": "addons/facebook-ios/facebook.xcframework"
+    }
+  },
+  "platform_android": {
+    "files": {
+      "GodotFacebook/android": "android/facebook"
+    }
+  }
+}

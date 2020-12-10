@@ -21,7 +21,7 @@
   },
   "platform_android": {
     "files": {
-      "GodotFacebook/android": "android/facebook"
+      "android": "android/facebook"
     }
   }
 }

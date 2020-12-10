@@ -3,13 +3,14 @@
   "description": "Facebook plugin for Godot engine",
   "version": "0.1.0",
   "dependencies": [
+    "nativelib-export-plugin"
   ],
   "files": {
-    "scripts": "scripts"
+    "scripts": "scripts",
+    "nativelib-export": "addons/nativelib-export"
   },
   "platform_ios": {
     "dependencies": [
-      "ios-export-plugin"
     ],
     "files": {
       "ios-framework/build/facebook.gdnlib": "addons/facebook-ios/",

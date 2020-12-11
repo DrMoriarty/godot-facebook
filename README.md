@@ -10,7 +10,7 @@ Facebook module for [Godot Game Engine](http://godotengine.org/) (Android and iO
 
 ## Usage
 
-You will find gd wrapper in `scripts/facebook.gd`. You can add it to you autoloading list and use it everywhere in your code.
+You will find gd wrapper in `scripts/facebook.gd`. You can add it to your autoloading list and use it everywhere in your code.
 
 ## API
 

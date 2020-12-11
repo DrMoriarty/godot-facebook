@@ -4,10 +4,15 @@ Facebook module for [Godot Game Engine](http://godotengine.org/) (Android and iO
 
 1. Install [NativeLib](https://github.com/DrMoriarty/nativelib-cli)
 2. Make `nativelib -i facebook-plugin` in your project directory.
+3. Enable `NativeLib export plugin` in Project settings and restart Godot.
+3. Export your project. You will see warning about FB_APP_ID.
+4. Setup your Facebook App ID in Project settings. 
 
 ## Usage
 
 You will find gd wrapper in `scripts/facebook.gd`. You can add it to you autoloading list and use it everywhere in your code.
+
+## API
 
 **Functions:**
 * init(app_id)

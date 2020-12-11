@@ -1,15 +1,13 @@
 Facebook module for [Godot Game Engine](http://godotengine.org/) (Android and iOS). 
 
-To use it, make sure you're able to compile the Godot android template, you can find the instructions [here](http://docs.godotengine.org/en/latest/reference/compiling_for_android.html). As the latest Facebook SDK needs Android SDK 15+, edit the file godot/platform/android/build.gradle.template and set minSdkVersion to 15. After that, just copy the the GodotFacebook folder to godot/modules and recompile it.
+## Installation
 
-***When using don't forget to set your FB APP ID in*** `GodotFacebook/android/res/values/strings.xml`
+1. Install [NativeLib](https://github.com/DrMoriarty/nativelib-cli)
+2. Make `nativelib -i facebook-plugin` in your project directory.
 
+## Usage
 
-**Module name (engine.cfg):**
-```
-[android]
-modules="org/godotengine/godot/GodotFacebook"
-```
+You will find gd wrapper in `scripts/facebook.gd`. You can add it to you autoloading list and use it everywhere in your code.
 
 **Functions:**
 * init(app_id)

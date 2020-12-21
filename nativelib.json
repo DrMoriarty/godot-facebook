@@ -1,11 +1,11 @@
 {
-  "name": "facebook-plugin",
+  "name": "facebook",
   "description": "Facebook plugin for Godot engine",
   "version": "0.1.0",
   "license": "MIT",
   "url": "https://github.com/DrMoriarty/godot-facebook",
   "dependencies": [
-    "nativelib-export-plugin"
+    "nativelib-export"
   ],
   "files": {
     "scripts": "scripts",

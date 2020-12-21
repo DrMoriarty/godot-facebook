@@ -16,23 +16,23 @@ var user = null
 func _ready():
     pause_mode = Node.PAUSE_MODE_PROCESS
     if not ProjectSettings.has_setting('Facebook/FB_APP_ID'):
-        Log.error('Facebook/FB_APP_ID not found! Set it in engine.cfg!')
+        push_error('Facebook/FB_APP_ID not found! Set it in engine.cfg!')
         return
     var app_id = ProjectSettings.get_setting('Facebook/FB_APP_ID')
     if(Engine.has_singleton("GodotFacebook")):
         fb = Engine.get_singleton("GodotFacebook")
         fb.init(app_id)
         fb.setFacebookCallbackId(get_instance_id())
-        Log.info('Facebook plugin inited')
+        print('Facebook plugin inited')
         emit_signal('fb_inited')
     elif OS.get_name() == 'iOS':
         fb = preload("res://addons/facebook-ios/facebook.gdns").new()
         fb.init(app_id)
         fb.setFacebookCallbackId(get_instance_id())
-        Log.info('Facebook plugin inited')
+        print('Facebook plugin inited')
         emit_signal('fb_inited')
     else:
-        Log.warning('Facebook plugin not found!')
+        push_warning('Facebook plugin not found!')
 
 func login(permissions = null):
     if fb != null:
@@ -194,13 +194,13 @@ func login_failed(error):
     emit_signal('login_failed', error)
 
 func request_success(result):
-    Log.info('Facebook request finished: %s'%var2str(result))
+    #print('Facebook request finished: %s'%var2str(result))
     emit_signal('request_success', result)
 
 func request_cancelled():
-    Log.warning('Facebook request cancelled')
+    push_warning('Facebook request cancelled')
     emit_signal('request_cancelled')
 
 func request_failed(err):
-    Log.error('Facebook request failed: %s'%var2str(err))
+    push_error('Facebook request failed: %s'%var2str(err))
     emit_signal('request_failed', err)

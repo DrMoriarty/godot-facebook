@@ -1,12 +1,15 @@
 {
   "name": "facebook",
-  "description": "Facebook plugin for Godot engine",
-  "version": "0.1.0",
+  "description": "Facebook plugin",
+  "version": "0.1.1",
   "license": "MIT",
   "url": "https://github.com/DrMoriarty/godot-facebook",
   "dependencies": [
     "nativelib-export"
   ],
+  "variables": {
+    "Facebook/FB_APP_ID": "Set your Facebook App ID here"
+  },
   "files": {
     "scripts": "scripts",
     "nativelib-export": "addons/nativelib-export"
@@ -24,6 +27,7 @@
   "platform_android": {
     "files": {
       "android": "android/facebook"
-    }
+    },
+    "android_module": "org/godotengine/godot/GodotFacebook"
   }
 }

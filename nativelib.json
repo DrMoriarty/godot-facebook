@@ -8,11 +8,16 @@
     "nativelib-export"
   ],
   "variables": {
-    "Facebook/FB_APP_ID": "Set your Facebook App ID here"
+    "Facebook/FB_APP_ID": {
+      "info": "Set your Facebook App ID here"
+    }
   },
   "files": {
     "scripts": "scripts",
     "nativelib-export": "addons/nativelib-export"
+  },
+  "autoload": {
+    "facebook": "*res://scripts/facebook.gd"
   },
   "platform_ios": {
     "dependencies": [

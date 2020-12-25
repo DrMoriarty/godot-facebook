@@ -9,9 +9,11 @@ static func load_file(fname: String) -> String:
 
 static func save_file(fname: String, content: String) -> void:
     var f = File.new()
-    f.open(fname, File.WRITE)
-    f.store_string(content)
-    f.close()
+    if f.open(fname, File.WRITE) == OK:
+        f.store_string(content)
+        f.close()
+    else:
+        print('File %s not found'%fname)
 
 static func process(features: PoolStringArray, debug: bool, path: String, flags: int) -> void:
     var FBAPPID := 'UNDEFINED'
@@ -28,7 +30,7 @@ static func process(features: PoolStringArray, debug: bool, path: String, flags:
     var plist = load_file('res://addons/nativelib-export/start_hook/facebook-plugin.plist')
     plist = plist.replace('!FBAPPID!', FBAPPID)
     plist = plist.replace('!FBAPPNAME!', APPNAME)
-    save_file('res://addons/nativelib-export/facebook-plugin.plist', plist)
+    save_file('res://addons/nativelib-export/iOS/facebook-plugin.plist', plist)
     # Android
     var strings = load_file('res://addons/nativelib-export/start_hook/facebook-strings.xml')
     strings = strings.replace('!FBAPPID!', FBAPPID)

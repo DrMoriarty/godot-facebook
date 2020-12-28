@@ -26,7 +26,7 @@ func _ready():
         print('Facebook plugin inited')
         emit_signal('fb_inited')
     elif OS.get_name() == 'iOS':
-        fb = preload("res://addons/facebook-ios/facebook.gdns").new()
+        fb = load("res://addons/facebook-ios/facebook.gdns").new()
         fb.init(app_id)
         fb.setFacebookCallbackId(get_instance_id())
         print('Facebook plugin inited')

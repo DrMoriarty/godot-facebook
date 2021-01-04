@@ -27,11 +27,13 @@ static func process(features: PoolStringArray, debug: bool, path: String, flags:
     if ProjectSettings.has_setting('application/config/name'):
         APPNAME = ProjectSettings.get_setting('application/config/name')
     # iOS
-    var plist = load_file('res://addons/nativelib-export/start_hook/facebook-plugin.plist')
-    plist = plist.replace('!FBAPPID!', FBAPPID)
-    plist = plist.replace('!FBAPPNAME!', APPNAME)
-    save_file('res://addons/nativelib-export/iOS/facebook-plugin.plist', plist)
+    if 'iOS' in features:
+        var plist = load_file('res://addons/nativelib-export/start_hook/facebook-plugin.plist')
+        plist = plist.replace('!FBAPPID!', FBAPPID)
+        plist = plist.replace('!FBAPPNAME!', APPNAME)
+        save_file('res://addons/nativelib-export/iOS/facebook-plugin.plist', plist)
     # Android
-    var strings = load_file('res://addons/nativelib-export/start_hook/facebook-strings.xml')
-    strings = strings.replace('!FBAPPID!', FBAPPID)
-    save_file('res://android/facebook/res/values/strings.xml', strings)
+    if 'Android' in features:
+        var strings = load_file('res://addons/nativelib-export/start_hook/facebook-strings.xml')
+        strings = strings.replace('!FBAPPID!', FBAPPID)
+        save_file('res://android/facebook/res/values/strings.xml', strings)

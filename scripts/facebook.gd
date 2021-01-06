@@ -9,7 +9,7 @@ signal request_cancelled
 signal request_failed(error)
 signal logout
 
-var fb = null
+var _fb = null
 var token = null
 var user = null
 
@@ -20,61 +20,61 @@ func _ready():
         return
     var app_id = ProjectSettings.get_setting('Facebook/FB_APP_ID')
     if(Engine.has_singleton("GodotFacebook")):
-        fb = Engine.get_singleton("GodotFacebook")
-        fb.init(app_id)
-        fb.setFacebookCallbackId(get_instance_id())
+        _fb = Engine.get_singleton("GodotFacebook")
+        _fb.init(app_id)
+        _fb.setFacebookCallbackId(get_instance_id())
         print('Facebook plugin inited')
         emit_signal('fb_inited')
     elif OS.get_name() == 'iOS':
-        fb = load("res://addons/facebook-ios/facebook.gdns").new()
-        fb.init(app_id)
-        fb.setFacebookCallbackId(get_instance_id())
+        _fb = load("res://addons/facebook-ios/facebook.gdns").new()
+        _fb.init(app_id)
+        _fb.setFacebookCallbackId(get_instance_id())
         print('Facebook plugin inited')
         emit_signal('fb_inited')
     else:
         push_warning('Facebook plugin not found!')
 
 func login(permissions = null):
-    if fb != null:
+    if _fb != null:
         if permissions == null:
             permissions = ["public_profile", 'email', 'user_friends']
             #permissions = ["public_profile", 'email']
-        fb.login(permissions)
+        _fb.login(permissions)
         return true
     else:
         return false
 
 func game_request(message, recipients='', objectId=''):
-    if fb != null:
-        fb.gameRequest(message, recipients, objectId)
+    if _fb != null:
+        _fb.gameRequest(message, recipients, objectId)
 
 func game_requests(object, method):
-    if fb != null:
-        fb.callApi('/me/apprequests', {}, object.get_instance_id(), method)
+    if _fb != null:
+        _fb.callApi('/me/apprequests', {}, object.get_instance_id(), method)
 
 func logout():
-    if fb != null:
-        fb.logout()
+    if _fb != null:
+        _fb.logout()
         emit_signal('logout')
 
 func is_logged_in():
-    if fb != null:
-        return fb.isLoggedIn()
+    if _fb != null:
+        return _fb.isLoggedIn()
     else:
         return false
 
 func user_profile(object, method):
-    if fb != null:
-        #fb.userProfile(object.get_instance_id(), method)
-        fb.callApi('/me', {'fields': 'id,name,first_name,last_name,picture'}, object.get_instance_id(), method)
+    if _fb != null:
+        #_fb.userProfile(object.get_instance_id(), method)
+        _fb.callApi('/me', {'fields': 'id,name,first_name,last_name,picture'}, object.get_instance_id(), method)
 
 func get_friends(object, method):
-    if fb != null:
-        fb.callApi('/me/friends', {'fields': 'name,first_name,last_name,picture', 'limit': 3000}, object.get_instance_id(), method)
+    if _fb != null:
+        _fb.callApi('/me/friends', {'fields': 'name,first_name,last_name,picture', 'limit': 3000}, object.get_instance_id(), method)
 
 func get_invitable_friends(object, method):
-    if fb != null:
-        fb.callApi('/me/invitable_friends', {'fields': 'first_name,last_name,picture', 'limit': 3000}, object.get_instance_id(), method)
+    if _fb != null:
+        _fb.callApi('/me/invitable_friends', {'fields': 'first_name,last_name,picture', 'limit': 3000}, object.get_instance_id(), method)
 
 # FB Analytics
 
@@ -134,42 +134,42 @@ FBSDKAppEventParameterNameOrderID                = fb_order_id
 """
 
 func set_push_token(token):
-    if fb != null:
-        fb.set_push_token(token)
+    if _fb != null:
+        _fb.set_push_token(token)
         
 func log_event(event, value = 0, params = null):
-    if fb != null:
+    if _fb != null:
         if value != 0 and params != null:
-            fb.log_event_value_params(event, value, params)
+            _fb.log_event_value_params(event, value, params)
         elif value != 0:
-            fb.log_event_value(event, value)
+            _fb.log_event_value(event, value)
         elif params != null:
-            fb.log_event_params(event, params)
+            _fb.log_event_params(event, params)
         else:
-            fb.log_event(event)
+            _fb.log_event(event)
 
 func log_purchase(price, currency = 'USD', params = null):
-    if fb != null:
+    if _fb != null:
         if params != null:
-            fb.log_purchase_params(price, currency, params)
+            _fb.log_purchase_params(price, currency, params)
         else:
-            fb.log_purchase(price, currency)
+            _fb.log_purchase(price, currency)
 
 func deep_link_uri():
-    if fb != null:
-        return fb.deep_link_uri()
+    if _fb != null:
+        return _fb.deep_link_uri()
     else:
         return null
 
 func deep_link_ref():
-    if fb != null:
-        return fb.deep_link_ref()
+    if _fb != null:
+        return _fb.deep_link_ref()
     else:
         return null
 
 func deep_link_promo():
-    if fb != null:
-        return fb.deep_link_promo()
+    if _fb != null:
+        return _fb.deep_link_promo()
     else:
         return null
 

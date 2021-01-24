@@ -1,7 +1,8 @@
 {
   "name": "facebook",
+  "display_name": "Facebook SDK",
   "description": "Facebook plugin",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "license": "MIT",
   "url": "https://github.com/DrMoriarty/godot-facebook",
   "author": {
@@ -9,6 +10,8 @@
     "url": "https://github.com/DrMoriarty",
     "donate": "https://ko-fi.com/drmoriarty"
   },
+  "godot_version": "3.2.3",
+  "category": "misc",
   "dependencies": [
     "nativelib-export"
   ],

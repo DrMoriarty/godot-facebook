@@ -4,6 +4,11 @@
   "version": "0.1.3",
   "license": "MIT",
   "url": "https://github.com/DrMoriarty/godot-facebook",
+  "author": {
+    "name": "DrMoriarty",
+    "url": "https://github.com/DrMoriarty",
+    "donate": "https://ko-fi.com/drmoriarty"
+  },
   "dependencies": [
     "nativelib-export"
   ],

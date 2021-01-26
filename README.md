@@ -4,56 +4,40 @@ Facebook module for [Godot Game Engine](http://godotengine.org/) (Android and iO
 
 1. Install [NativeLib-CLI](https://github.com/DrMoriarty/nativelib-cli) or [NativeLib Addon](https://github.com/DrMoriarty/nativelib).
 2. Make `nativelib -i facebook` in your project directory if your are using CLI.
+5. Setup your Facebook App ID in package details or Project settings (`Facebook/FB_APP_ID`). 
 3. Enable **NativeLib export plugin** in Project settings.
-4. Export your project. You will see warning about FB_APP_ID.
-5. Setup your Facebook App ID in Project settings (`Facebook/FB_APP_ID`). 
 6. Enable **Custom Build** for using in Android.
 
 ## Usage
 
-You will find gd wrapper in `scripts/facebook.gd`. You can add it to your autoloading list and use it everywhere in your code.
+Gd script wrapper (in `scripts/facebook.gd`) will be automatically added to your autoloading list. You can use it everywhere in your code.
 
 ## API
 
-**Functions:**
-* init(app_id)
-* appInvite(app_link_url, preview_image_url)
-* setFacebookCallbackId(get_instance_ID())
-* getFacebookCallbackId()
-* login()
+### Common Functions
+* login(permissions: Array)
+* game_request(message: String, recipients: String, objectId: String)
+* game_requests(callback_object: Object, callback_method: String)
 * logout()
-* isLoggedIn()
+* is_logged_in() -> bool
+* user_profile(callback_object: Object, callback_method: String)
+* get_friends(callback_object: Object, callback_method: String)
+* get_invitable_friends(callback_object: Object, callback_method: String)
 
-**Callback functions:**
+### Analytics Functions
+* set_push_token(token: String)
+* log_event(event: String, value: int = 0, params: Dictionary = null)
+* log_purchase(price: float, currency: String = 'USD', params : Dictionary = null)
+* deep_link_uri() -> String
+* deep_link_ref() -> String
+* deep_link_promo() -> String
+
+### Signals
+* fb_inited
 * login_success(token)
-* login_cancelled()
+* login_cancelled
 * login_failed(error)
-
-**Example:**
-```python
-func _ready():
-    if(Globals.has_singleton("GodotFacebook")):
-        fb = Globals.get_singleton("GodotFacebook")
-        fb.init(‘YOUR_APP_ID’)
-        fb.setFacebookCallbackId(get_instance_ID())
-
-func login_success(token):
-    print('Facebook login success: %s'%token)
-
-func login_cancelled():
-    print('Facebook login cancelled')
-
-func login_failed(error):
-    print('Facebook login failed: %s'%error)
-
-(...)
-
-func _on_share_button_pressed():
-    if fb != null:
-        fb.appInvite(“YOUR_APP_URL”, ‘YOUR_APP_IMG_URL’)
-
-func _on_login_button_pressed():
-    if fb != null:
-        fb.login()
-```        
-
+* request_success(result)
+* request_cancelled
+* request_failed(error)
+* logout

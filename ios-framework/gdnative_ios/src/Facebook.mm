@@ -195,7 +195,7 @@ void FacebookPlugin::gameRequest(const String& message, const String& recipient,
     [dialog show];
 }
 
-void FacebookPlugin::login(const Array& permissions) {
+void FacebookPlugin::login(const Array permissions) {
     if (![FBSDKAccessToken currentAccessToken]) {
         UIViewController *vc = [UIApplication.sharedApplication.keyWindow rootViewController];
         NSMutableArray *perms = [NSMutableArray new];
@@ -262,7 +262,7 @@ void FacebookPlugin::userProfile(Object *callbackOb, const String& callbackMetho
         }];
 }
 
-void FacebookPlugin::callApi(const String& path, const Dictionary& properties, Object *callbackOb, const String& callbackMethod) {
+void FacebookPlugin::callApi(const String& path, const Dictionary properties, Object *callbackOb, const String& callbackMethod) {
 
     NSString *cbMethod = [NSString stringWithUTF8String:callbackMethod.utf8().get_data()];
     NSDictionary *paramsDict = convertFromDictionary(properties);
@@ -301,13 +301,13 @@ void FacebookPlugin::logEventValue(const String& event, double value) {
     [FBSDKAppEvents logEvent:event_name valueToSum:value];
 }
 
-void FacebookPlugin::logEventParams(const String& event, const Dictionary& params) {
+void FacebookPlugin::logEventParams(const String& event, const Dictionary params) {
     NSString *event_name = [NSString stringWithUTF8String:event.utf8().get_data()];
     NSDictionary *paramsDict = convertFromDictionary(params);
     [FBSDKAppEvents logEvent:event_name parameters:paramsDict];
 }
 
-void FacebookPlugin::logEventValueParams(const String& event, double value, const Dictionary& params) {
+void FacebookPlugin::logEventValueParams(const String& event, double value, const Dictionary params) {
     NSString *event_name = [NSString stringWithUTF8String:event.utf8().get_data()];
     NSDictionary *paramsDict = convertFromDictionary(params);
     [FBSDKAppEvents logEvent:event_name valueToSum:value parameters:paramsDict];

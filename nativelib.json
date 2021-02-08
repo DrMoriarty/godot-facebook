@@ -2,7 +2,7 @@
   "name": "facebook",
   "display_name": "Facebook SDK",
   "description": "Facebook plugin",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "url": "https://github.com/DrMoriarty/godot-facebook",
   "author": {

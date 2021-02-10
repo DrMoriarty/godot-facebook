@@ -28,7 +28,7 @@ func _ready():
     elif OS.get_name() == 'iOS':
         _fb = load("res://addons/facebook-ios/facebook.gdns").new()
         _fb.init(app_id)
-        _fb.setFacebookCallbackId(get_instance_id())
+        _fb.setFacebookCallbackId(self)
         print('Facebook plugin inited')
         emit_signal('fb_inited')
     else:
@@ -50,7 +50,10 @@ func game_request(message, recipients='', objectId=''):
 
 func game_requests(object, method):
     if _fb != null:
-        _fb.callApi('/me/apprequests', {}, object.get_instance_id(), method)
+        if OS.get_name() == 'iOS':
+            _fb.callApi('/me/apprequests', {}, object, method)
+        else:
+            _fb.callApi('/me/apprequests', {}, object.get_instance_id(), method)
 
 func logout():
     if _fb != null:
@@ -65,16 +68,24 @@ func is_logged_in():
 
 func user_profile(object, method):
     if _fb != null:
-        #_fb.userProfile(object.get_instance_id(), method)
-        _fb.callApi('/me', {'fields': 'id,name,first_name,last_name,picture'}, object.get_instance_id(), method)
+        if OS.get_name() == 'iOS':
+            _fb.callApi('/me', {'fields': 'id,name,first_name,last_name,picture'}, object, method)
+        else:
+            _fb.callApi('/me', {'fields': 'id,name,first_name,last_name,picture'}, object.get_instance_id(), method)
 
 func get_friends(object, method):
     if _fb != null:
-        _fb.callApi('/me/friends', {'fields': 'name,first_name,last_name,picture', 'limit': 3000}, object.get_instance_id(), method)
+        if OS.get_name() == 'iOS':
+            _fb.callApi('/me/friends', {'fields': 'name,first_name,last_name,picture', 'limit': 3000}, object, method)
+        else:
+            _fb.callApi('/me/friends', {'fields': 'name,first_name,last_name,picture', 'limit': 3000}, object.get_instance_id(), method)
 
 func get_invitable_friends(object, method):
     if _fb != null:
-        _fb.callApi('/me/invitable_friends', {'fields': 'first_name,last_name,picture', 'limit': 3000}, object.get_instance_id(), method)
+        if OS.get_name() == 'iOS':
+            _fb.callApi('/me/invitable_friends', {'fields': 'first_name,last_name,picture', 'limit': 3000}, object, method)
+        else:
+            _fb.callApi('/me/invitable_friends', {'fields': 'first_name,last_name,picture', 'limit': 3000}, object.get_instance_id(), method)
 
 # FB Analytics
 

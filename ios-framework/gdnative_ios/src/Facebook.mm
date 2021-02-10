@@ -167,7 +167,7 @@ void FacebookPlugin::setFacebookCallbackId(Object* facebookcallback) {
     fbCallbackObj = facebookcallback;
 }
 
-void FacebookPlugin::gameRequest(const String& message, const String& recipient, const String& objectId) {
+void FacebookPlugin::gameRequest(const String message, const String recipient, const String objectId) {
     
     FBSDKGameRequestDialog *dialog = [[FBSDKGameRequestDialog alloc] init];
     MyGameRequestDialogDelegate *delegate = [[MyGameRequestDialogDelegate alloc] init];
@@ -262,11 +262,12 @@ void FacebookPlugin::userProfile(Object *callbackOb, const String& callbackMetho
         }];
 }
 
-void FacebookPlugin::callApi(const String& path, const Dictionary properties, Object *callbackOb, const String& callbackMethod) {
+void FacebookPlugin::callApi(const String path, const Dictionary properties, Object *callbackOb, const String callbackMethod) {
 
+    NSString *pth = [NSString stringWithUTF8String:path.utf8().get_data()];
     NSString *cbMethod = [NSString stringWithUTF8String:callbackMethod.utf8().get_data()];
     NSDictionary *paramsDict = convertFromDictionary(properties);
-    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:[NSString stringWithUTF8String:path.utf8().get_data()] parameters:paramsDict];
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:pth parameters:paramsDict];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
             //dispatch_async(dispatch_get_main_queue(), ^{
                     ERR_FAIL_COND(!callbackOb);

@@ -26,12 +26,12 @@ public:
     
     void init(const godot::String& key);
     void setFacebookCallbackId(godot::Object* facebookcallback);
-    void gameRequest(const godot::String& message, const godot::String& recipient, const godot::String& objectId);
+    void gameRequest(const godot::String message, const godot::String recipient, const godot::String objectId);
     void login(const godot::Array permissions);
     void logout();
     bool isLoggedIn();
-    void userProfile(Object *callbackOb, const godot::String& callbackMethod);
-    void callApi(const godot::String& path, const godot::Dictionary properties, Object *callbackOb, const godot::String& callbackMethod);
+    void userProfile(godot::Object *callbackOb, const godot::String& callbackMethod);
+    void callApi(const godot::String path, const godot::Dictionary properties, godot::Object *callbackOb, const godot::String callbackMethod);
 
     void pushToken(const godot::String& token);
     void logEvent(const godot::String& event);

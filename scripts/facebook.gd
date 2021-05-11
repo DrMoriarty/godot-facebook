@@ -19,14 +19,14 @@ func _ready():
         push_error('Facebook/FB_APP_ID not found! Set it in engine.cfg!')
         return
     var app_id = ProjectSettings.get_setting('Facebook/FB_APP_ID')
-    if(Engine.has_singleton("GodotFacebook")):
+    if(Engine.has_singleton("GodotFacebook")):  # Android
         _fb = Engine.get_singleton("GodotFacebook")
         _fb.init(app_id)
         _fb.setFacebookCallbackId(get_instance_id())
         print('Facebook plugin inited')
         emit_signal('fb_inited')
-    elif OS.get_name() == 'iOS':
-        _fb = load("res://addons/facebook-ios/facebook.gdns").new()
+    if(Engine.has_singleton("Facebook")):  # iOS
+        _fb = Engine.get_singleton("Facebook")
         _fb.init(app_id)
         _fb.setFacebookCallbackId(self)
         print('Facebook plugin inited')

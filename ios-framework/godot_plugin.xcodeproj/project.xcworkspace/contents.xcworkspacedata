@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:gdnative_ios.xcodeproj">
+      location = "self:godot_plugin.xcodeproj">
    </FileRef>
 </Workspace>

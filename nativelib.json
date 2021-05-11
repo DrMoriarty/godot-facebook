@@ -2,7 +2,7 @@
   "name": "facebook",
   "display_name": "Facebook SDK",
   "description": "Facebook plugin",
-  "version": "0.1.6",
+  "version": "9.3.0",
   "license": "MIT",
   "url": "https://github.com/DrMoriarty/godot-facebook",
   "author": {
@@ -10,7 +10,7 @@
     "url": "https://github.com/DrMoriarty",
     "donate": "https://ko-fi.com/drmoriarty"
   },
-  "godot_version": "3.2.3",
+  "godot_version": "3.3.0",
   "category": "misc",
   "dependencies": [
     "nativelib-export"
@@ -28,13 +28,13 @@
     "facebook": "*res://scripts/facebook.gd"
   },
   "platform_ios": {
-    "dependencies": [
-    ],
     "files": {
-      "ios-framework/build/facebook.gdnlib": "addons/facebook-ios/",
-      "ios-framework/build/facebook.gdns": "addons/facebook-ios/",
-      "ios-framework/build/.gitignore": "addons/facebook-ios/",
-      "ios-framework/build/facebook.xcframework": "addons/facebook-ios/facebook.xcframework"
+      "ios-framework/facebook.gdip": "ios/plugins/facebook/",
+      "ios-framework/build/facebook.debug.xcframework": "ios/plugins/facebook/facebook.debug.xcframework",
+      "ios-framework/build/facebook.release.xcframework": "ios/plugins/facebook/facebook.release.xcframework",
+      "ios-framework/plugin/FBSDKCoreKit.framework": "ios/plugins/facebook/FBSDKCoreKit.framework",
+      "ios-framework/plugin/FBSDKLoginKit.framework": "ios/plugins/facebook/FBSDKLoginKit.framework",
+      "ios-framework/plugin/FBSDKShareKit.framework": "ios/plugins/facebook/FBSDKShareKit.framework"
     }
   },
   "platform_android": {

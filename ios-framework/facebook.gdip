@@ -1,0 +1,17 @@
+[config]
+name="Facebook"
+binary="facebook.xcframework"
+
+initialization="register_facebook_types"
+deinitialization="unregister_facebook_types"
+
+[dependencies]
+linked=["./FBSDKCoreKit.framework", "./FBSDKLoginKit.framework", "./FBSDKShareKit.framework"]
+embedded=[]
+system=[]
+
+capabilities=[]
+
+files=[]
+
+[plist]

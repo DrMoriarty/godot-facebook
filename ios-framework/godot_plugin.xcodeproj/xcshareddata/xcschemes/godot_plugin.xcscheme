@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1150"
+   LastUpgradeVersion = "1230"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "90A13CE724AB317C00E8464F"
-               BuildableName = "facebook.framework"
-               BlueprintName = "gdnative_ios"
-               ReferencedContainer = "container:gdnative_ios.xcodeproj">
+               BlueprintIdentifier = "90CAAA9324E71FF10013969F"
+               BuildableName = "libgodot_plugin.a"
+               BlueprintName = "godot_plugin"
+               ReferencedContainer = "container:godot_plugin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -50,10 +50,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "90A13CE724AB317C00E8464F"
-            BuildableName = "facebook.framework"
-            BlueprintName = "gdnative_ios"
-            ReferencedContainer = "container:gdnative_ios.xcodeproj">
+            BlueprintIdentifier = "90CAAA9324E71FF10013969F"
+            BuildableName = "libgodot_plugin.a"
+            BlueprintName = "godot_plugin"
+            ReferencedContainer = "container:godot_plugin.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

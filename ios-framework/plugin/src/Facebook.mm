@@ -21,8 +21,6 @@
 #include <mach/mach_host.h>
 #import <sys/utsname.h>
 
-using namespace godot;
-
 FBSDKLoginManager* loginManager = NULL;
 Object* FacebookPlugin::fbCallbackObj = NULL;
 
@@ -392,22 +390,22 @@ Array FacebookPlugin::extinfo() {
     return res;
 }
 
-void FacebookPlugin::_register_methods()
+void FacebookPlugin::_bind_methods()
 {
-    register_method("_init", &FacebookPlugin::_init);
-    register_method("init", &FacebookPlugin::init);
-    register_method("setFacebookCallbackId", &FacebookPlugin::setFacebookCallbackId);
-    register_method("gameRequest", &FacebookPlugin::gameRequest);
-    register_method("login", &FacebookPlugin::login);
-    register_method("logout", &FacebookPlugin::logout);
-    register_method("isLoggedIn", &FacebookPlugin::isLoggedIn);
-    register_method("userProfile", &FacebookPlugin::userProfile);
-    register_method("callApi", &FacebookPlugin::callApi);
-    register_method("set_push_token", &FacebookPlugin::pushToken);
-    register_method("log_event", &FacebookPlugin::logEvent);
-    register_method("log_event_value", &FacebookPlugin::logEventValue);
-    register_method("log_event_params", &FacebookPlugin::logEventParams);
-    register_method("log_event_value_params", &FacebookPlugin::logEventValueParams);
-    register_method("advertising_id", &FacebookPlugin::advertisingID);
-    register_method("extinfo", &FacebookPlugin::extinfo);
+    ClassDB::bind_method(D_METHOD("_init"), &FacebookPlugin::_init);
+    ClassDB::bind_method(D_METHOD("init"), &FacebookPlugin::init);
+    ClassDB::bind_method(D_METHOD("setFacebookCallbackId"), &FacebookPlugin::setFacebookCallbackId);
+    ClassDB::bind_method(D_METHOD("gameRequest"), &FacebookPlugin::gameRequest);
+    ClassDB::bind_method(D_METHOD("login"), &FacebookPlugin::login);
+    ClassDB::bind_method(D_METHOD("logout"), &FacebookPlugin::logout);
+    ClassDB::bind_method(D_METHOD("isLoggedIn"), &FacebookPlugin::isLoggedIn);
+    ClassDB::bind_method(D_METHOD("userProfile"), &FacebookPlugin::userProfile);
+    ClassDB::bind_method(D_METHOD("callApi"), &FacebookPlugin::callApi);
+    ClassDB::bind_method(D_METHOD("set_push_token"), &FacebookPlugin::pushToken);
+    ClassDB::bind_method(D_METHOD("log_event"), &FacebookPlugin::logEvent);
+    ClassDB::bind_method(D_METHOD("log_event_value"), &FacebookPlugin::logEventValue);
+    ClassDB::bind_method(D_METHOD("log_event_params"), &FacebookPlugin::logEventParams);
+    ClassDB::bind_method(D_METHOD("log_event_value_params"), &FacebookPlugin::logEventValueParams);
+    ClassDB::bind_method(D_METHOD("advertising_id"), &FacebookPlugin::advertisingID);
+    ClassDB::bind_method(D_METHOD("extinfo"), &FacebookPlugin::extinfo);
 }

@@ -41,6 +41,7 @@ public:
     void logEventValue(const String& event, double value);
     void logEventParams(const String& event, const Dictionary params);
     void logEventValueParams(const String& event, double value, const Dictionary params);
+    void setAdvertiserTracking(bool tracking);
 
     String advertisingID();
     Array extinfo();

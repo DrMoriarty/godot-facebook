@@ -184,6 +184,10 @@ func deep_link_promo():
     else:
         return null
 
+func set_advertiser_tracking(enabled: bool) -> void:
+    if _fb != null and OS.get_name() == 'iOS':
+        _fb.setAdvertiserTracking(enabled)
+    
 
 # FACEBOOK SDK CALLBACKS
 

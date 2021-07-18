@@ -390,6 +390,13 @@ Array FacebookPlugin::extinfo() {
     return res;
 }
 
+void FacebookPlugin::setAdvertiserTracking(bool enabled)
+{
+    if (@available(iOS 14, *)) {
+        [FBSDKSettings setAdvertiserTrackingEnabled: enabled];
+    }
+}
+
 void FacebookPlugin::_bind_methods()
 {
     ClassDB::bind_method(D_METHOD("_init"), &FacebookPlugin::_init);
@@ -408,4 +415,5 @@ void FacebookPlugin::_bind_methods()
     ClassDB::bind_method(D_METHOD("log_event_value_params"), &FacebookPlugin::logEventValueParams);
     ClassDB::bind_method(D_METHOD("advertising_id"), &FacebookPlugin::advertisingID);
     ClassDB::bind_method(D_METHOD("extinfo"), &FacebookPlugin::extinfo);
+    ClassDB::bind_method(D_METHOD("setAdvertiserTracking"), &FacebookPlugin::setAdvertiserTracking);
 }
